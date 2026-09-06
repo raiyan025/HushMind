@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hushmind/Member 1/home.dart';
+import 'package:hushmind/Member 1/login.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -15,16 +15,14 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     // Simulate initial loading or navigation delay
-    Future.delayed(const Duration(seconds: 8), () {
-  if (!mounted) return;
+    Future.delayed(const Duration(seconds: 3), () {
+      if (!mounted) return;
 
-  Navigator.pushReplacement(
-    context,
-    MaterialPageRoute(
-      builder: (_) => const MyHomePage(title: 'HushMind'),
-    ),
-  );
-});
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const SignInScreen()),
+      );
+    });
   }
 
   @override
@@ -67,7 +65,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   ),
                   child: const Center(
                     child: Icon(
-                      Icons.auto_awesome,
+                      Icons.spa_sharp,
                       color: Color(0xFF1B2313),
                       size: 38,
                     ),
