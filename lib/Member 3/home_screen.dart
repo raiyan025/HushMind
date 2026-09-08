@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'private_check_in_screen.dart';
-
+import 'two_minute_reset_screen.dart';
+import 'package:hushmind/Member 1/meditation_session.dart';
 class HomeScreen extends StatelessWidget {
   final VoidCallback? onNavigateToCheckIn;
   final VoidCallback? onNavigateToReset;
@@ -10,7 +11,23 @@ class HomeScreen extends StatelessWidget {
     this.onNavigateToCheckIn,
     this.onNavigateToReset,
   });
+  void _openBreathing(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const TwoMinuteResetScreen(),
+      ),
+    );
+  }
 
+  void _openMeditation(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const MeditationPlayerScreen(),
+      ),
+    );
+  }
   void _openDeepSleepAudio(BuildContext context) {
     _showFeatureToast(context, 'Deep sleep release');
   }
@@ -114,10 +131,7 @@ class HomeScreen extends StatelessWidget {
                             SizedBox(height: 2),
                             Text(
                               'Make a little room for yourself.',
-                              style: TextStyle(
-                                color: textMuted,
-                                fontSize: 13,
-                              ),
+                              style: TextStyle(color: textMuted, fontSize: 13),
                             ),
                           ],
                         ),
@@ -213,7 +227,8 @@ class HomeScreen extends StatelessWidget {
                           width: double.infinity,
                           height: 54,
                           child: ElevatedButton(
-                            onPressed: onNavigateToCheckIn ??
+                            onPressed:
+                                onNavigateToCheckIn ??
                                 () {
                                   Navigator.push(
                                     context,
@@ -267,8 +282,7 @@ class HomeScreen extends StatelessWidget {
                           icon: Icons.air_rounded,
                           title: 'Breathe',
                           subtitle: '2 min',
-                          onTap: onNavigateToReset ??
-                              () => _showFeatureToast(context, 'Breathe'),
+                          onTap: onNavigateToReset ?? () => _openBreathing(context),
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -280,7 +294,7 @@ class HomeScreen extends StatelessWidget {
                           icon: Icons.blur_on_rounded,
                           title: 'Meditate',
                           subtitle: '5 min',
-                          onTap: () => _showFeatureToast(context, 'Meditate'),
+                          onTap: () => _openMeditation(context),
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -393,51 +407,6 @@ class HomeScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-
-                      // Floating "Trusted Contact" Emergency Button
-                      Positioned(
-                        right: 12,
-                        bottom: -4,
-                        child: GestureDetector(
-                          onTap: () => _showFeatureToast(context, 'Trusted Contact'),
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 10,
-                            ),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF4A2B2D),
-                              borderRadius: BorderRadius.circular(24),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withValues(alpha: 0.3),
-                                  blurRadius: 10,
-                                  offset: const Offset(0, 4),
-                                ),
-                              ],
-                            ),
-                            child: const Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  Icons.phone_in_talk_rounded,
-                                  color: Color(0xFFF7B1B6),
-                                  size: 16,
-                                ),
-                                SizedBox(width: 8),
-                                Text(
-                                  'Trusted contact',
-                                  style: TextStyle(
-                                    color: Color(0xFFF7B1B6),
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
                     ],
                   ),
 
@@ -472,11 +441,7 @@ class HomeScreen extends StatelessWidget {
         ),
         child: Column(
           children: [
-            Icon(
-              icon,
-              color: primaryLime,
-              size: 26,
-            ),
+            Icon(icon, color: primaryLime, size: 26),
             const SizedBox(height: 14),
             Text(
               title,
@@ -489,10 +454,7 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(height: 4),
             Text(
               subtitle,
-              style: const TextStyle(
-                color: textMuted,
-                fontSize: 12,
-              ),
+              style: const TextStyle(color: textMuted, fontSize: 12),
             ),
           ],
         ),

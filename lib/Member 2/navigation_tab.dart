@@ -6,6 +6,7 @@ import 'package:hushmind/Member%202/journal.dart';
 import 'package:hushmind/community_forum.dart';
 import 'package:hushmind/insights.dart';
 import 'package:hushmind/Member%202/profile.dart';
+import 'package:hushmind/Member 3/two_minute_reset_screen.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -17,17 +18,28 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int selectedIndex = 0;
 
-  final pages = [
-    const HomeScreen(title: ''),
-    WellnessLibraryScreen(onNavigateToReset: () {}),
-    const JournalPage(),
-    const ForumPage(),
-    const Insights(),
-    const ProfilePage(),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final pages = [
+      const HomeScreen(),
+
+      WellnessLibraryScreen(
+        onNavigateToReset: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const TwoMinuteResetScreen(),
+            ),
+          );
+        },
+      ),
+
+      const JournalPage(),
+      const ForumPage(),
+      const Insights(),
+      const ProfilePage(),
+    ];
+
     return Scaffold(
       body: pages[selectedIndex],
 
@@ -117,7 +129,6 @@ class BottomNavigation extends StatelessWidget {
                 size: 21,
               ),
             ),
-
             if (selected)
               Text(
                 names[index],

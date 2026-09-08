@@ -1,8 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
-import 'audio_player_screen.dart';
+import 'package:hushmind/Member 1/meditation_session.dart';
 
-// Custom Painter for Dashed/Dotted Circle Icon (Quiet the noise)
 class DashedCirclePainter extends CustomPainter {
   final Color color;
   const DashedCirclePainter({required this.color});
@@ -105,10 +104,7 @@ class UpwardArrowsPainter extends CustomPainter {
 class WellnessLibraryScreen extends StatefulWidget {
   final VoidCallback onNavigateToReset;
 
-  const WellnessLibraryScreen({
-    super.key,
-    required this.onNavigateToReset,
-  });
+  const WellnessLibraryScreen({super.key, required this.onNavigateToReset});
 
   @override
   State<WellnessLibraryScreen> createState() => _WellnessLibraryScreenState();
@@ -117,13 +113,7 @@ class WellnessLibraryScreen extends StatefulWidget {
 class _WellnessLibraryScreenState extends State<WellnessLibraryScreen> {
   String _selectedCategory = 'All';
 
-  final List<String> _categories = [
-    'All',
-    'Calm',
-    'Sleep',
-    'Focus',
-    'Morning',
-  ];
+  final List<String> _categories = ['All', 'Calm', 'Sleep', 'Focus', 'Morning'];
 
   final List<Map<String, dynamic>> _meditationSessions = [
     {
@@ -152,16 +142,11 @@ class _WellnessLibraryScreenState extends State<WellnessLibraryScreen> {
     },
   ];
 
-  void _openAudioPlayer(Map<String, dynamic> session) {
+  void _openMeditation() {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => AudioPlayerScreen(
-          title: session['title'] as String,
-          subtitle: session['subtitle'] as String,
-          totalDurationSeconds: session['durationSeconds'] as int,
-          iconType: session['iconType'] as String,
-        ),
+        builder: (context) => const MeditationPlayerScreen(),
       ),
     );
   }
@@ -187,7 +172,10 @@ class _WellnessLibraryScreenState extends State<WellnessLibraryScreen> {
                     color: Color(0xFFC0FB50),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(Icons.favorite_rounded, color: Colors.black),
+                  child: const Icon(
+                    Icons.favorite_rounded,
+                    color: Colors.black,
+                  ),
                 ),
                 const SizedBox(width: 14),
                 const Text(
@@ -207,15 +195,33 @@ class _WellnessLibraryScreenState extends State<WellnessLibraryScreen> {
             ),
             const SizedBox(height: 20),
             ListTile(
-              leading: const Icon(Icons.phone_in_talk_rounded, color: Color(0xFFC0FB50)),
-              title: const Text('24/7 Support Helpline', style: TextStyle(color: Colors.white)),
-              subtitle: const Text('Free and confidential support', style: TextStyle(color: Color(0xFF9EA798))),
+              leading: const Icon(
+                Icons.phone_in_talk_rounded,
+                color: Color(0xFFC0FB50),
+              ),
+              title: const Text(
+                '24/7 Support Helpline',
+                style: TextStyle(color: Colors.white),
+              ),
+              subtitle: const Text(
+                'Free and confidential support',
+                style: TextStyle(color: Color(0xFF9EA798)),
+              ),
               onTap: () => Navigator.pop(context),
             ),
             ListTile(
-              leading: const Icon(Icons.chat_bubble_outline_rounded, color: Color(0xFFC0FB50)),
-              title: const Text('Chat with a Mentor', style: TextStyle(color: Colors.white)),
-              subtitle: const Text('Text-based guidance', style: TextStyle(color: Color(0xFF9EA798))),
+              leading: const Icon(
+                Icons.chat_bubble_outline_rounded,
+                color: Color(0xFFC0FB50),
+              ),
+              title: const Text(
+                'Chat with a Mentor',
+                style: TextStyle(color: Colors.white),
+              ),
+              subtitle: const Text(
+                'Text-based guidance',
+                style: TextStyle(color: Color(0xFF9EA798)),
+              ),
               onTap: () => Navigator.pop(context),
             ),
             const SizedBox(height: 12),
@@ -232,7 +238,9 @@ class _WellnessLibraryScreenState extends State<WellnessLibraryScreen> {
           width: 32,
           height: 32,
           child: CustomPaint(
-            painter: DashedCirclePainter(color: Colors.black.withValues(alpha: 0.85)),
+            painter: DashedCirclePainter(
+              color: Colors.black.withValues(alpha: 0.85),
+            ),
           ),
         );
       case 'crescent_moon':
@@ -246,7 +254,9 @@ class _WellnessLibraryScreenState extends State<WellnessLibraryScreen> {
           width: 32,
           height: 32,
           child: CustomPaint(
-            painter: ConcentricTargetPainter(color: Colors.black.withValues(alpha: 0.85)),
+            painter: ConcentricTargetPainter(
+              color: Colors.black.withValues(alpha: 0.85),
+            ),
           ),
         );
       default:
@@ -264,8 +274,8 @@ class _WellnessLibraryScreenState extends State<WellnessLibraryScreen> {
     final filteredSessions = _selectedCategory == 'All'
         ? _meditationSessions
         : _meditationSessions
-            .where((session) => session['category'] == _selectedCategory)
-            .toList();
+              .where((session) => session['category'] == _selectedCategory)
+              .toList();
 
     return Scaffold(
       backgroundColor: darkBackground,
@@ -493,7 +503,7 @@ class _WellnessLibraryScreenState extends State<WellnessLibraryScreen> {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 14.0),
                         child: GestureDetector(
-                          onTap: () => _openAudioPlayer(session),
+                          onTap: _openMeditation,
                           behavior: HitTestBehavior.opaque,
                           child: Container(
                             width: double.infinity,

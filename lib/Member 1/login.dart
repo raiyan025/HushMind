@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'meditation_session.dart';
+import 'package:hushmind/Member%202/navigation_tab.dart';
 import 'registration.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -200,7 +200,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const MeditationPlayerScreen(),
+                            builder: (context) => const MainPage(),
                           ),
                         );
                       },
