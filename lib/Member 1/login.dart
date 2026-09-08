@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'meditation_session.dart';
 import 'registration.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -162,14 +163,16 @@ class _SignInScreenState extends State<SignInScreen> {
                   _buildInputField(
                     label: 'EMAIL',
                     controller: _emailController,
+                    prefixIcon: Icons.alternate_email_rounded,
                     keyboardType: TextInputType.emailAddress,
                   ),
                   const SizedBox(height: 14),
 
                   // Password Input Field
                   _buildInputField(
-                    label: 'PASSWORD',
+                    label: 'Password',
                     controller: _passwordController,
+                    prefixIcon: Icons.lock_outline_rounded,
                     obscureText: _obscurePassword,
                     suffixIcon: IconButton(
                       icon: Icon(
@@ -194,7 +197,12 @@ class _SignInScreenState extends State<SignInScreen> {
                     height: 56,
                     child: ElevatedButton(
                       onPressed: () {
-                        // Handle sign in action
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const MeditationPlayerScreen(),
+                          ),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: primaryGreen,
@@ -264,13 +272,14 @@ class _SignInScreenState extends State<SignInScreen> {
   Widget _buildInputField({
     required String label,
     required TextEditingController controller,
+    required IconData prefixIcon,
     TextInputType keyboardType = TextInputType.text,
     bool obscureText = false,
     Widget? suffixIcon,
   }) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       decoration: BoxDecoration(
         color: cardFill,
         borderRadius: BorderRadius.circular(16),
@@ -280,33 +289,46 @@ class _SignInScreenState extends State<SignInScreen> {
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             label,
             style: const TextStyle(
               color: textMuted,
-              fontSize: 11,
-              fontWeight: FontWeight.w700,
-              letterSpacing: 0.8,
+              fontSize: 10.5,
+              fontWeight: FontWeight.w500,
             ),
           ),
           const SizedBox(height: 4),
-          TextField(
-            controller: controller,
-            obscureText: obscureText,
-            keyboardType: keyboardType,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 15,
-              fontWeight: FontWeight.w400,
-            ),
-            decoration: InputDecoration(
-              isDense: true,
-              contentPadding: EdgeInsets.zero,
-              border: InputBorder.none,
-              suffixIcon: suffixIcon,
-            ),
+          Row(
+            children: [
+              Icon(
+                prefixIcon,
+                color: const Color(0xFFBACABA),
+                size: 20,
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: TextField(
+                  controller: controller,
+                  obscureText: obscureText,
+                  keyboardType: keyboardType,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  decoration: const InputDecoration(
+                    isDense: true,
+                    contentPadding: EdgeInsets.symmetric(vertical: 8),
+                    border: InputBorder.none,
+                  ),
+                ),
+              ),
+              if (suffixIcon != null) suffixIcon,
+            ],
           ),
+          const SizedBox(height: 4),
         ],
       ),
     );
