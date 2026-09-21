@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'meditation_session.dart';
@@ -18,8 +17,8 @@ class _SignInScreenState extends State<SignInScreen> {
   final TextEditingController _passwordController =
       TextEditingController(text: '••••••••');
 
-  static const Color primaryGreen = Color(0xFFC7F464);
-  static const Color darkBackground = Color(0xFF0D120B);
+  static const Color green = Color(0xFFC7F464);
+  static const Color black = Color(0xFF0D120B);
   static const Color cardFill = Color(0xFF1E261D);
   static const Color textMuted = Color(0xFF8E9E8E);
 
@@ -35,27 +34,9 @@ class _SignInScreenState extends State<SignInScreen> {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
     return Scaffold(
-      backgroundColor: darkBackground,
+      backgroundColor: black,
       body: Stack(
         children: [
-          // Background Glow Effect
-          Positioned(
-            top: -60,
-            right: -40,
-            child: Container(
-              width: 280,
-              height: 280,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: const Color(0xFF3B4E20).withOpacity(0.55),
-              ),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 90, sigmaY: 90),
-                child: Container(color: Colors.transparent),
-              ),
-            ),
-          ),
-
           SafeArea(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -71,7 +52,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         width: 48,
                         height: 48,
                         decoration: BoxDecoration(
-                          color: primaryGreen,
+                          color: green,
                           borderRadius: BorderRadius.circular(14),
                         ),
                         child: const Center(
@@ -120,45 +101,6 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                   const SizedBox(height: 32),
 
-                  // Demo Mode Banner
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 16,
-                    ),
-                    decoration: BoxDecoration(
-                      color: cardFill.withOpacity(0.7),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: Colors.white.withOpacity(0.04),
-                      ),
-                    ),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.bolt_rounded,
-                          color: primaryGreen,
-                          size: 16,
-                        ),
-                        SizedBox(width: 6),
-                        Flexible(
-                          child: Text(
-                            'Local demo mode • connect Firebase when ready',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: primaryGreen,
-                              fontSize: 12.5,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-
                   // Email Input Field
                   _buildInputField(
                     label: 'EMAIL',
@@ -205,7 +147,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: primaryGreen,
+                        backgroundColor: green,
                         foregroundColor: const Color(0xFF161F12),
                         elevation: 0,
                         shape: RoundedRectangleBorder(
@@ -238,7 +180,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       child: const Text(
                         'New here? Create an account',
                         style: TextStyle(
-                          color: primaryGreen,
+                          color: green,
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
                         ),
