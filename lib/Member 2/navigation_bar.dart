@@ -22,18 +22,7 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     final pages = [
       const HomeScreen(),
-
-      WellnessLibraryScreen(
-        onNavigateToReset: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const TwoMinuteResetScreen(),
-            ),
-          );
-        },
-      ),
-
+      const WellnessLibraryScreen(),
       const JournalPage(),
       const ForumPage(),
       const Insights(),

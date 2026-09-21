@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hushmind/Member%202/navigation_tab.dart';
+import 'package:hushmind/Member%202/navigation_bar.dart';
 import 'registration.dart';
 
 class SignInScreen extends StatefulWidget {
