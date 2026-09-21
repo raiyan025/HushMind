@@ -14,7 +14,8 @@ class _MeditationPlayerScreenState extends State<MeditationPlayerScreen> {
 
   bool _isPlaying = false;
   Timer? _timer;
-
+  static const Color green = Color(0xFFC7F464);
+  static const Color black = Color(0xFF0C130B);
   @override
   void dispose() {
     _timer?.cancel();
@@ -55,26 +56,17 @@ class _MeditationPlayerScreenState extends State<MeditationPlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const accentGreen = Color(0xFFC6FF75);
-    const darkBg = Color(0xFF0C120C);
     final remainingDuration = _totalDuration - _currentPosition;
 
     return Scaffold(
-      backgroundColor: darkBg,
+      backgroundColor: black,
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: RadialGradient(
-            center: Alignment(0, -0.4),
-            radius: 1.0,
-            colors: [Color(0xFF263D18), darkBg],
-          ),
-        ),
+        decoration: const BoxDecoration(color: black),
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Column(
               children: [
-                // Top Bar
                 SizedBox(
                   height: 40,
                   child: Stack(
@@ -101,20 +93,14 @@ class _MeditationPlayerScreenState extends State<MeditationPlayerScreen> {
                   ),
                 ),
                 const Spacer(flex: 2),
-
-                // Artwork Card
                 Container(
                   width: 260,
                   height: 260,
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [Color(0xFFAFE678), Color(0xFF537A3D)],
-                    ),
-                    borderRadius: BorderRadius.circular(44),
+                  decoration: const BoxDecoration(
+                    color: green,
+                    borderRadius: BorderRadius.all(Radius.circular(44)),
                   ),
-                  child: Center(
+                  child: const Center(
                     child: Icon(
                       Icons.self_improvement,
                       size: 72,
@@ -123,8 +109,6 @@ class _MeditationPlayerScreenState extends State<MeditationPlayerScreen> {
                   ),
                 ),
                 const Spacer(flex: 2),
-
-                // Titles
                 const Text(
                   'Quiet the noise',
                   textAlign: TextAlign.center,
@@ -141,16 +125,14 @@ class _MeditationPlayerScreenState extends State<MeditationPlayerScreen> {
                   style: TextStyle(color: Colors.white54, fontSize: 14),
                 ),
                 const SizedBox(height: 32),
-
-                // Progress Bar
                 SliderTheme(
                   data: SliderTheme.of(context).copyWith(
                     trackHeight: 4,
                     thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6),
                     overlayShape: const RoundSliderOverlayShape(overlayRadius: 14),
-                    activeTrackColor: accentGreen,
+                    activeTrackColor: green,
                     inactiveTrackColor: Colors.white12,
-                    thumbColor: accentGreen,
+                    thumbColor: green,
                   ),
                   child: Slider(
                     value: _currentPosition.inSeconds.toDouble(),
@@ -179,8 +161,6 @@ class _MeditationPlayerScreenState extends State<MeditationPlayerScreen> {
                   ),
                 ),
                 const SizedBox(height: 24),
-
-                // Controls
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -196,7 +176,7 @@ class _MeditationPlayerScreenState extends State<MeditationPlayerScreen> {
                         width: 72,
                         height: 72,
                         decoration: const BoxDecoration(
-                          color: accentGreen,
+                          color: green,
                           shape: BoxShape.circle,
                         ),
                         child: Icon(
@@ -215,8 +195,6 @@ class _MeditationPlayerScreenState extends State<MeditationPlayerScreen> {
                   ],
                 ),
                 const Spacer(flex: 1),
-
-                // Demo Notice
                 const Text(
                   'Demo timer • add licensed audio before release',
                   style: TextStyle(color: Colors.white30, fontSize: 12),
@@ -237,7 +215,7 @@ class _MeditationPlayerScreenState extends State<MeditationPlayerScreen> {
       child: Container(
         padding: const EdgeInsets.all(8),
         decoration: const BoxDecoration(
-          color: Color(0xFFC6FF75),
+          color: green,
           shape: BoxShape.circle,
         ),
         child: Icon(icon, size: 20, color: iconColor),
