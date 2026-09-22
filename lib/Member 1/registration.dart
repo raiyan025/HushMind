@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hushmind/Member 1/login.dart';
@@ -19,8 +18,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   bool _obscurePassword = true;
 
-  static const Color primaryGreen = Color(0xFFC7F464);
-  static const Color darkBackground = Color(0xFF0C130B);
+  static const Color green = Color(0xFFC7F464);
+  static const Color black = Color(0xFF0C130B);
   static const Color inputBg = Color(0xFF1B231B);
   static const Color textMuted = Color(0xFF8A9A8C);
   static const Color hintGrey = Color(0xFF5E6D60);
@@ -38,20 +37,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
     return Scaffold(
-      backgroundColor: darkBackground,
+      backgroundColor: black,
       body: Stack(
         children: [
-          // Ambient soft glow spots
-          Positioned(
-            top: -40,
-            right: -60,
-            child: _buildGlowSpot(const Color(0xFF32481A), 280),
-          ),
-          Positioned(
-            bottom: 120,
-            left: -80,
-            child: _buildGlowSpot(const Color(0xFF233612), 260),
-          ),
 
           SafeArea(
             child: SingleChildScrollView(
@@ -62,14 +50,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 children: [
                   const SizedBox(height: 12),
 
-                  // Brand Header
+                  // logo
                   Row(
                     children: [
                       Container(
                         width: 44,
                         height: 44,
                         decoration: BoxDecoration(
-                          color: primaryGreen,
+                          color: green,
                           borderRadius: BorderRadius.circular(13),
                         ),
                         child: const Center(
@@ -115,55 +103,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                   const SizedBox(height: 28),
-
-                  // Demo Banner
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 14,
-                    ),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF242C22),
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                        color: Colors.white.withOpacity(0.04),
-                      ),
-                    ),
-                    child: Row(
-                      children: [
-                        Container(
-                          width: 26,
-                          height: 26,
-                          decoration: const BoxDecoration(
-                            color: primaryGreen,
-                            shape: BoxShape.circle,
-                          ),
-                          child: const Center(
-                            child: Icon(
-                              Icons.bolt_rounded,
-                              color: Color(0xFF131E10),
-                              size: 18,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        const Expanded(
-                          child: Text(
-                            'Local demo mode • connect Firebase\nwhen ready',
-                            style: TextStyle(
-                              color: Color(0xFFBACABA),
-                              fontSize: 12.5,
-                              height: 1.3,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-
                   // Name Field
                   _buildInputBox(
                     controller: _nameController,
@@ -211,7 +150,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     child: ElevatedButton(
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: primaryGreen,
+                        backgroundColor: green,
                         foregroundColor: const Color(0xFF131E10),
                         elevation: 0,
                         shape: RoundedRectangleBorder(
@@ -263,7 +202,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             TextSpan(
                               text: 'Sign in',
                               style: TextStyle(
-                                color: primaryGreen,
+                                color: green,
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
@@ -369,18 +308,4 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget _buildGlowSpot(Color color, double size) {
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: color.withOpacity(0.45),
-      ),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 90, sigmaY: 90),
-        child: Container(color: Colors.transparent),
-      ),
-    );
-  }
 }

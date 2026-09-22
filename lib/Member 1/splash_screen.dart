@@ -30,24 +30,13 @@ class _SplashScreenState extends State<SplashScreen> {
     // Light status bar icons for dark background
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
-    const primaryGreen = Color(0xFFC7F464);
-    const darkBackground = Color(0xFF0D120B);
+    const Green = Color(0xFFC7F464);
+    const Black = Color(0xFF0D120B);
 
     return Scaffold(
-      backgroundColor: darkBackground,
+      backgroundColor: Black,
       body: Stack(
         children: [
-          // Ambient blurred glow spots for the background
-          Positioned(
-            top: -60,
-            right: -40,
-            child: _glowSpot(const Color(0xFF384A1E), 260),
-          ),
-          Positioned(
-            bottom: 80,
-            left: -50,
-            child: _glowSpot(const Color(0xFF1E2812), 220),
-          ),
 
           // Main Content
           SafeArea(
@@ -60,7 +49,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   width: 96,
                   height: 96,
                   decoration: BoxDecoration(
-                    color: primaryGreen,
+                    color: Green,
                     borderRadius: BorderRadius.circular(28),
                   ),
                   child: const Center(
@@ -102,7 +91,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _dot(primaryGreen),
+                    _dot(Green),
                     const SizedBox(width: 8),
                     _dot(const Color(0xFF4A554A)),
                     const SizedBox(width: 8),
@@ -118,21 +107,6 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 
-  // Soft glow circular blur widget
-  Widget _glowSpot(Color color, double size) {
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: color.withOpacity(0.55),
-      ),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 90, sigmaY: 90),
-        child: Container(color: Colors.transparent),
-      ),
-    );
-  }
 
   // Indicator dot helper
   Widget _dot(Color color) {
