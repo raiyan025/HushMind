@@ -14,7 +14,7 @@ class BreatheScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // --- STEP 1: Top Bar (Back Button + Header Text) ---
+
                 Row(
                   children: [
                     InkWell(
@@ -43,7 +43,7 @@ class BreatheScreen extends StatelessWidget {
                   ],
                 ),
 
-                // --- STEP 2: Main Title Section ---
+
                 const SizedBox(height: 24),
                 const Text(
                   "Breathe with\nthe light.",
@@ -55,7 +55,7 @@ class BreatheScreen extends StatelessWidget {
                   ),
                 ),
 
-                // --- STEP 3: Subtitle Instruction ---
+
                 const SizedBox(height: 12),
                 const Text(
                   "Inhale for 4 • hold for 4 • exhale for 4",
@@ -65,7 +65,7 @@ class BreatheScreen extends StatelessWidget {
                   ),
                 ),
 
-                // --- STEP 4: Main Circle Indicator ---
+
                 const SizedBox(height: 40),
                 Center(
                   child: Container(
@@ -104,10 +104,10 @@ class BreatheScreen extends StatelessWidget {
                   ),
                 ),
 
-                // --- STEP 5: Bottom Audio Controls & End Session ---
+
                 const SizedBox(height: 50),
 
-                // Ambient Sound Selection Card
+
                 Container(
                   color: const Color(0xFF232B22),
                   padding: const EdgeInsets.symmetric(
