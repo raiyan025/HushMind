@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hushmind/Member 1/login.dart';
+import 'package:hushmind/login.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});

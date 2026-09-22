@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:hushmind/Member 1/login.dart';
+import 'package:hushmind/login.dart';
+import 'package:hushmind/onboarding2.dart';
 
-class OnboardingPrivacy extends StatelessWidget {
-  const OnboardingPrivacy({super.key});
+class Onboarding extends StatelessWidget {
+  const Onboarding({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +44,11 @@ class OnboardingPrivacy extends StatelessWidget {
               Row(
                 children: [
                   const SizedBox(width: 32),
-                  Icon(Icons.lock_outline, color: Color(0xFFC9FF73), size: 50),
+                  Icon(
+                    Icons.favorite_border,
+                    color: Color(0xFFC9FF73),
+                    size: 50,
+                  ),
                 ],
               ),
               const SizedBox(height: 35),
@@ -52,7 +57,7 @@ class OnboardingPrivacy extends StatelessWidget {
                 children: [
                   const SizedBox(width: 32),
                   const Text(
-                    'Your words stay yours',
+                    'A gentler daily rhythm',
                     style: TextStyle(
                       color: Color(0xFF99C85E),
                       fontSize: 17,
@@ -68,7 +73,7 @@ class OnboardingPrivacy extends StatelessWidget {
                 children: [
                   const SizedBox(width: 32),
                   const Text(
-                    'A private space\nto reflect.',
+                    'Pause. Notice.\nBegin again.',
                     style: TextStyle(
                       color: Color(0xFFF5F7F1),
                       fontSize: 42,
@@ -83,9 +88,9 @@ class OnboardingPrivacy extends StatelessWidget {
                 children: [
                   const SizedBox(width: 32),
                   const Text(
-                    'Keep a personal journal and review\n'
-                    'emotional patterns. HushMind supports\n'
-                    'wellness; it does not diagnose.',
+                    'Check in with your emotions without\n'
+                    'judgement and build a clearer picture of\n'
+                    'what supports you.',
                     style: TextStyle(color: Color(0xFFB1B8AA), fontSize: 17),
                   ),
                 ],
@@ -100,7 +105,7 @@ class OnboardingPrivacy extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const SignInScreen(),
+                          builder: (context) => const OnboardingCalm(),
                         ),
                       );
                     },
@@ -113,7 +118,7 @@ class OnboardingPrivacy extends StatelessWidget {
                       ),
                     ),
 
-                    child: const Text('Enter HushMind'),
+                    child: const Text('Continue'),
                   ),
                 ],
               ),
@@ -124,5 +129,4 @@ class OnboardingPrivacy extends StatelessWidget {
     );
   }
 }
-
 

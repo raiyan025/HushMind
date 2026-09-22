@@ -1,32 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hushmind/Member 1/login.dart';
+import 'package:hushmind/navigation_bar.dart';
+import 'registration.dart';
 
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+class SignInScreen extends StatefulWidget {
+  const SignInScreen({super.key});
 
   @override
-  State<RegisterScreen> createState() => _RegisterScreenState();
+  State<SignInScreen> createState() => _SignInScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
-  final TextEditingController _nameController = TextEditingController();
+class _SignInScreenState extends State<SignInScreen> {
+  bool _obscurePassword = true;
   final TextEditingController _emailController =
       TextEditingController(text: 'hello@hushmind.app');
   final TextEditingController _passwordController =
       TextEditingController(text: '••••••••');
 
-  bool _obscurePassword = true;
-
   static const Color green = Color(0xFFC7F464);
-  static const Color black = Color(0xFF0C130B);
-  static const Color inputBg = Color(0xFF1B231B);
-  static const Color textMuted = Color(0xFF8A9A8C);
-  static const Color hintGrey = Color(0xFF5E6D60);
+  static const Color black = Color(0xFF0D120B);
+  static const Color cardFill = Color(0xFF1E261D);
+  static const Color textMuted = Color(0xFF8E9E8E);
 
   @override
   void dispose() {
-    _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
@@ -40,31 +37,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
       backgroundColor: black,
       body: Stack(
         children: [
-
           SafeArea(
             child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 16),
 
-                  // logo
+                  // Header Logo + Brand
                   Row(
                     children: [
                       Container(
-                        width: 44,
-                        height: 44,
+                        width: 48,
+                        height: 48,
                         decoration: BoxDecoration(
                           color: green,
-                          borderRadius: BorderRadius.circular(13),
+                          borderRadius: BorderRadius.circular(14),
                         ),
                         child: const Center(
                           child: Icon(
                             Icons.spa_sharp,
-                            color: Color(0xFF131E10),
-                            size: 24,
+                            color: Color(0xFF1B2313),
+                            size: 22,
                           ),
                         ),
                       ),
@@ -73,57 +68,52 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         'HushMind',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
+                          fontSize: 22,
+                          fontWeight: FontWeight.w700,
                           letterSpacing: -0.3,
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 40),
+                  const SizedBox(height: 44),
 
-                  // Heading Titles
+                  // Title Heading
                   const Text(
-                    'Create your\nsafe space.',
+                    'Welcome back.\nTake a breath.',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 36,
+                      fontSize: 38,
                       height: 1.15,
-                      fontWeight: FontWeight.w400,
-                      letterSpacing: -0.5,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: -0.8,
                     ),
                   ),
-                  const SizedBox(height: 14),
+                  const SizedBox(height: 20),
+
+                  // Subtitle
                   const Text(
-                    'Start with small, private moments of care.',
+                    'Your next quiet moment is waiting.',
                     style: TextStyle(
                       color: textMuted,
-                      fontSize: 14.5,
+                      fontSize: 16,
                       fontWeight: FontWeight.w400,
                     ),
                   ),
-                  const SizedBox(height: 28),
-                  // Name Field
-                  _buildInputBox(
-                    controller: _nameController,
-                    hint: 'Name',
-                    prefixIcon: Icons.person_outline_rounded,
-                  ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 32),
 
-                  // Email Field (with mini floating-style label)
-                  _buildInputBox(
+                  // Email Input Field
+                  _buildInputField(
+                    label: 'EMAIL',
                     controller: _emailController,
-                    label: 'Email',
                     prefixIcon: Icons.alternate_email_rounded,
                     keyboardType: TextInputType.emailAddress,
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 14),
 
-                  // Password Field
-                  _buildInputBox(
-                    controller: _passwordController,
+                  // Password Input Field
+                  _buildInputField(
                     label: 'Password',
+                    controller: _passwordController,
                     prefixIcon: Icons.lock_outline_rounded,
                     obscureText: _obscurePassword,
                     suffixIcon: IconButton(
@@ -143,84 +133,70 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   const SizedBox(height: 28),
 
-                  // Create Account CTA Button
+                  // Sign In Button
                   SizedBox(
                     width: double.infinity,
-                    height: 54,
+                    height: 56,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const MainPage(),
+                          ),
+                        );
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: green,
-                        foregroundColor: const Color(0xFF131E10),
+                        foregroundColor: const Color(0xFF161F12),
                         elevation: 0,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(22),
+                          borderRadius: BorderRadius.circular(28),
                         ),
                       ),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.north_east_rounded,
-                            size: 18,
-                            color: Color(0xFF131E10),
-                          ),
-                          SizedBox(width: 8),
-                          Text(
-                            'Create account',
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ],
+                      child: const Text(
+                        'Sign in',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 26),
+                  const SizedBox(height: 24),
 
-                  // Sign In Switch Link
+                  // Create Account Link
                   Center(
                     child: GestureDetector(
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const SignInScreen(),
+                            builder: (context) => const RegisterScreen(),
                           ),
                         );
+                    
                       },
-                      child: RichText(
-                        text: const TextSpan(
-                          text: 'Already have an account? ',
-                          style: TextStyle(
-                            color: Color(0xFFBACABA),
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          children: [
-                            TextSpan(
-                              text: 'Sign in',
-                              style: TextStyle(
-                                color: green,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ],
+                      child: const Text(
+                        'New here? Create an account',
+                        style: TextStyle(
+                          color: green,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 48),
+                  const SizedBox(height: 64),
 
-                  // Bottom Disclaimer Note
+                  // Disclaimer Footer
                   const Center(
                     child: Text(
-                      'HushMind supports everyday wellness and is not a\nmedical service.',
+                      'HushMind supports everyday wellness\nand is not a medical service.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: textMuted,
-                        fontSize: 12.5,
+                        fontSize: 13,
                         height: 1.4,
                       ),
                     ),
@@ -235,20 +211,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  Widget _buildInputBox({
+  Widget _buildInputField({
+    required String label,
     required TextEditingController controller,
     required IconData prefixIcon,
-    String? label,
-    String? hint,
+    TextInputType keyboardType = TextInputType.text,
     bool obscureText = false,
     Widget? suffixIcon,
-    TextInputType keyboardType = TextInputType.text,
   }) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       decoration: BoxDecoration(
-        color: inputBg,
+        color: cardFill,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: Colors.white.withOpacity(0.04),
@@ -258,17 +233,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (label != null) ...[
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: const TextStyle(
-                color: textMuted,
-                fontSize: 10.5,
-                fontWeight: FontWeight.w500,
-              ),
+          Text(
+            label,
+            style: const TextStyle(
+              color: textMuted,
+              fontSize: 10.5,
+              fontWeight: FontWeight.w500,
             ),
-          ],
+          ),
+          const SizedBox(height: 4),
           Row(
             children: [
               Icon(
@@ -287,14 +260,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     fontSize: 15,
                     fontWeight: FontWeight.w400,
                   ),
-                  decoration: InputDecoration(
-                    hintText: hint,
-                    hintStyle: const TextStyle(
-                      color: hintGrey,
-                      fontSize: 15,
-                    ),
+                  decoration: const InputDecoration(
                     isDense: true,
-                    contentPadding: const EdgeInsets.symmetric(vertical: 8),
+                    contentPadding: EdgeInsets.symmetric(vertical: 8),
                     border: InputBorder.none,
                   ),
                 ),
@@ -302,10 +270,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
               if (suffixIcon != null) suffixIcon,
             ],
           ),
-          if (label != null) const SizedBox(height: 4),
+          const SizedBox(height: 4),
         ],
       ),
     );
   }
-
 }

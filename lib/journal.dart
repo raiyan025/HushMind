@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hushmind/Member%202/journal_editor.dart';
+import 'package:hushmind/journal_editor.dart';
 
 class JournalPage extends StatelessWidget {
   const JournalPage({super.key});

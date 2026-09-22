@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:hushmind/Member%203/home_screen.dart';
-import 'package:hushmind/Member 3/wellness_library_screen_full.dart';
-import 'package:hushmind/Member%202/journal.dart';
-import 'package:hushmind/Member%202/profile.dart';
+import 'package:hushmind/home_screen.dart';
+import 'package:hushmind/wellness_library_screen_full.dart';
+import 'package:hushmind/journal.dart';
+import 'package:hushmind/profile.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});

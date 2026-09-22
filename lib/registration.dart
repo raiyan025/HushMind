@@ -1,29 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hushmind/Member%202/navigation_tab.dart';
-import 'registration.dart';
+import 'package:hushmind/login.dart';
 
-class SignInScreen extends StatefulWidget {
-  const SignInScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<SignInScreen> createState() => _SignInScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _SignInScreenState extends State<SignInScreen> {
-  bool _obscurePassword = true;
+class _RegisterScreenState extends State<RegisterScreen> {
+  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController =
       TextEditingController(text: 'hello@hushmind.app');
   final TextEditingController _passwordController =
       TextEditingController(text: '••••••••');
 
+  bool _obscurePassword = true;
+
   static const Color green = Color(0xFFC7F464);
-  static const Color black = Color(0xFF0D120B);
-  static const Color cardFill = Color(0xFF1E261D);
-  static const Color textMuted = Color(0xFF8E9E8E);
+  static const Color black = Color(0xFF0C130B);
+  static const Color inputBg = Color(0xFF1B231B);
+  static const Color textMuted = Color(0xFF8A9A8C);
+  static const Color hintGrey = Color(0xFF5E6D60);
 
   @override
   void dispose() {
+    _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
@@ -37,29 +40,31 @@ class _SignInScreenState extends State<SignInScreen> {
       backgroundColor: black,
       body: Stack(
         children: [
+
           SafeArea(
             child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 12),
 
-                  // Header Logo + Brand
+                  // logo
                   Row(
                     children: [
                       Container(
-                        width: 48,
-                        height: 48,
+                        width: 44,
+                        height: 44,
                         decoration: BoxDecoration(
                           color: green,
-                          borderRadius: BorderRadius.circular(14),
+                          borderRadius: BorderRadius.circular(13),
                         ),
                         child: const Center(
                           child: Icon(
                             Icons.spa_sharp,
-                            color: Color(0xFF1B2313),
-                            size: 22,
+                            color: Color(0xFF131E10),
+                            size: 24,
                           ),
                         ),
                       ),
@@ -68,52 +73,57 @@ class _SignInScreenState extends State<SignInScreen> {
                         'HushMind',
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 22,
-                          fontWeight: FontWeight.w700,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
                           letterSpacing: -0.3,
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 44),
+                  const SizedBox(height: 40),
 
-                  // Title Heading
+                  // Heading Titles
                   const Text(
-                    'Welcome back.\nTake a breath.',
+                    'Create your\nsafe space.',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 38,
+                      fontSize: 36,
                       height: 1.15,
-                      fontWeight: FontWeight.w500,
-                      letterSpacing: -0.8,
+                      fontWeight: FontWeight.w400,
+                      letterSpacing: -0.5,
                     ),
                   ),
-                  const SizedBox(height: 20),
-
-                  // Subtitle
+                  const SizedBox(height: 14),
                   const Text(
-                    'Your next quiet moment is waiting.',
+                    'Start with small, private moments of care.',
                     style: TextStyle(
                       color: textMuted,
-                      fontSize: 16,
+                      fontSize: 14.5,
                       fontWeight: FontWeight.w400,
                     ),
                   ),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 28),
+                  // Name Field
+                  _buildInputBox(
+                    controller: _nameController,
+                    hint: 'Name',
+                    prefixIcon: Icons.person_outline_rounded,
+                  ),
+                  const SizedBox(height: 16),
 
-                  // Email Input Field
-                  _buildInputField(
-                    label: 'EMAIL',
+                  // Email Field (with mini floating-style label)
+                  _buildInputBox(
                     controller: _emailController,
+                    label: 'Email',
                     prefixIcon: Icons.alternate_email_rounded,
                     keyboardType: TextInputType.emailAddress,
                   ),
-                  const SizedBox(height: 14),
+                  const SizedBox(height: 16),
 
-                  // Password Input Field
-                  _buildInputField(
-                    label: 'Password',
+                  // Password Field
+                  _buildInputBox(
                     controller: _passwordController,
+                    label: 'Password',
                     prefixIcon: Icons.lock_outline_rounded,
                     obscureText: _obscurePassword,
                     suffixIcon: IconButton(
@@ -133,70 +143,84 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                   const SizedBox(height: 28),
 
-                  // Sign In Button
+                  // Create Account CTA Button
                   SizedBox(
                     width: double.infinity,
-                    height: 56,
+                    height: 54,
                     child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const MainPage(),
-                          ),
-                        );
-                      },
+                      onPressed: () {},
                       style: ElevatedButton.styleFrom(
                         backgroundColor: green,
-                        foregroundColor: const Color(0xFF161F12),
+                        foregroundColor: const Color(0xFF131E10),
                         elevation: 0,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(28),
+                          borderRadius: BorderRadius.circular(22),
                         ),
                       ),
-                      child: const Text(
-                        'Sign in',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                        ),
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.north_east_rounded,
+                            size: 18,
+                            color: Color(0xFF131E10),
+                          ),
+                          SizedBox(width: 8),
+                          Text(
+                            'Create account',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 26),
 
-                  // Create Account Link
+                  // Sign In Switch Link
                   Center(
                     child: GestureDetector(
                       onTap: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const RegisterScreen(),
+                            builder: (context) => const SignInScreen(),
                           ),
                         );
-                    
                       },
-                      child: const Text(
-                        'New here? Create an account',
-                        style: TextStyle(
-                          color: green,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
+                      child: RichText(
+                        text: const TextSpan(
+                          text: 'Already have an account? ',
+                          style: TextStyle(
+                            color: Color(0xFFBACABA),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                          children: [
+                            TextSpan(
+                              text: 'Sign in',
+                              style: TextStyle(
+                                color: green,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(height: 64),
+                  const SizedBox(height: 48),
 
-                  // Disclaimer Footer
+                  // Bottom Disclaimer Note
                   const Center(
                     child: Text(
-                      'HushMind supports everyday wellness\nand is not a medical service.',
+                      'HushMind supports everyday wellness and is not a\nmedical service.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: textMuted,
-                        fontSize: 13,
+                        fontSize: 12.5,
                         height: 1.4,
                       ),
                     ),
@@ -211,19 +235,20 @@ class _SignInScreenState extends State<SignInScreen> {
     );
   }
 
-  Widget _buildInputField({
-    required String label,
+  Widget _buildInputBox({
     required TextEditingController controller,
     required IconData prefixIcon,
-    TextInputType keyboardType = TextInputType.text,
+    String? label,
+    String? hint,
     bool obscureText = false,
     Widget? suffixIcon,
+    TextInputType keyboardType = TextInputType.text,
   }) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       decoration: BoxDecoration(
-        color: cardFill,
+        color: inputBg,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
           color: Colors.white.withOpacity(0.04),
@@ -233,15 +258,17 @@ class _SignInScreenState extends State<SignInScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(
-            label,
-            style: const TextStyle(
-              color: textMuted,
-              fontSize: 10.5,
-              fontWeight: FontWeight.w500,
+          if (label != null) ...[
+            const SizedBox(height: 4),
+            Text(
+              label,
+              style: const TextStyle(
+                color: textMuted,
+                fontSize: 10.5,
+                fontWeight: FontWeight.w500,
+              ),
             ),
-          ),
-          const SizedBox(height: 4),
+          ],
           Row(
             children: [
               Icon(
@@ -260,9 +287,14 @@ class _SignInScreenState extends State<SignInScreen> {
                     fontSize: 15,
                     fontWeight: FontWeight.w400,
                   ),
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
+                    hintText: hint,
+                    hintStyle: const TextStyle(
+                      color: hintGrey,
+                      fontSize: 15,
+                    ),
                     isDense: true,
-                    contentPadding: EdgeInsets.symmetric(vertical: 8),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 8),
                     border: InputBorder.none,
                   ),
                 ),
@@ -270,9 +302,10 @@ class _SignInScreenState extends State<SignInScreen> {
               if (suffixIcon != null) suffixIcon,
             ],
           ),
-          const SizedBox(height: 4),
+          if (label != null) const SizedBox(height: 4),
         ],
       ),
     );
   }
+
 }
