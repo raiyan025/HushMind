@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "461908647906",
+    "project_id": "hushmind-026",
+    "storage_bucket": "hushmind-026.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:461908647906:android:4e554f5e0733fc25faa3bb",
+        "android_client_info": {
+          "package_name": "com.hushmind.hushmind"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYu8eKs_ya4XVQfo1EWEl61-jRSS8PcBY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

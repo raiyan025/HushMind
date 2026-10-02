@@ -1,92 +1,143 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:hushmind/login.dart';
+import 'package:hushmind/about_us.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
+  Future<void> _signOut(BuildContext context) async {
+    await FirebaseAuth.instance.signOut();
+
+    if (!context.mounted) return;
+
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const SignInScreen()),
+      (route) => false,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          Image.asset(
-            'assets/images/bg.png',
-            width: double.infinity,
-            height: double.infinity,
-            fit: BoxFit.cover,
-          ),
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.userChanges(),
+      initialData: FirebaseAuth.instance.currentUser,
+      builder: (context, snapshot) {
+        final user = snapshot.data;
 
-          Column(
+        final displayName = (user?.displayName ?? '').trim();
+        final name = displayName.isNotEmpty ? displayName : 'Friend';
+        final email = user?.email ?? '';
+
+        return Scaffold(
+          body: Stack(
             children: [
-              const SizedBox(height: 55),
+              Image.asset(
+                'assets/images/bg.png',
+                width: double.infinity,
+                height: double.infinity,
+                fit: BoxFit.cover,
+              ),
 
-              Row(
+              Column(
                 children: [
-                  const SizedBox(width: 32),
-                  const Text(
-                    'Your space',
-                    style: TextStyle(color: Color(0xFFC9FF73), fontSize: 13),
-                  ),
-                ],
-              ),
+                  const SizedBox(height: 55),
 
-              const SizedBox(height: 8),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 32),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'Your space',
+                          style: TextStyle(
+                            color: Color(0xFFC9FF73),
+                            fontSize: 13,
+                          ),
+                        ),
 
-              Row(
-                children: [
-                  const SizedBox(width: 32),
-                  const Text(
-                    'Make HushMind\nfeel like yours.',
-                    style: TextStyle(color: Color(0xFFF5F7F1), fontSize: 20),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 100),
-
-              Container(
-                width: 80,
-                height: 80,
-                decoration: const BoxDecoration(color: Color(0xFFC9FF73)),
-                child: const Icon(Icons.person, color: Colors.black, size: 40),
-              ),
-
-              const SizedBox(height: 20),
-
-              const Text(
-                'Name',
-                style: TextStyle(color: Colors.white, fontSize: 20),
-              ),
-
-              const SizedBox(height: 5),
-
-              const Text(
-                'name@gmail.com',
-                style: TextStyle(color: Color(0xFFB1B8AA), fontSize: 14),
-              ),
-
-              const SizedBox(height: 50),
-
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SignInScreen(),
+                        IconButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const AboutUsScreen(),
+                              ),
+                            );
+                          },
+                          icon: const Icon(
+                            Icons.info_outline,
+                            color: Color(0xFFC9FF73),
+                            size: 24,
+                          ),
+                        ),
+                      ],
                     ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFFC9FF73),
-                  foregroundColor: Colors.black,
-                  minimumSize: const Size(350, 50),
-                ),
-                child: const Text('Sign out'),
+                  ),
+
+                  const SizedBox(height: 8),
+
+                  Row(
+                    children: [
+                      const SizedBox(width: 32),
+                      const Text(
+                        'Make HushMind\nfeel like yours.',
+                        style: TextStyle(
+                          color: Color(0xFFF5F7F1),
+                          fontSize: 20,
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  const SizedBox(height: 100),
+
+                  Container(
+                    width: 80,
+                    height: 80,
+                    decoration: const BoxDecoration(color: Color(0xFFC9FF73)),
+                    child: const Icon(
+                      Icons.person,
+                      color: Colors.black,
+                      size: 40,
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  Text(
+                    name,
+                    style: const TextStyle(color: Colors.white, fontSize: 20),
+                  ),
+
+                  const SizedBox(height: 5),
+
+                  Text(
+                    email,
+                    style: const TextStyle(
+                      color: Color(0xFFB1B8AA),
+                      fontSize: 14,
+                    ),
+                  ),
+
+                  const SizedBox(height: 50),
+
+                  ElevatedButton(
+                    onPressed: () => _signOut(context),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFC9FF73),
+                      foregroundColor: Colors.black,
+                      minimumSize: const Size(350, 50),
+                    ),
+                    child: const Text('Sign out'),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

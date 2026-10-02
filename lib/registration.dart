@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hushmind/login.dart';
+import 'package:hushmind/navigation_bar.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -11,15 +13,13 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _emailController =
-      TextEditingController(text: 'hello@hushmind.app');
-  final TextEditingController _passwordController =
-      TextEditingController(text: '••••••••');
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   bool _obscurePassword = true;
+  bool _isLoading = false;
 
   static const Color green = Color(0xFFC7F464);
-  static const Color black = Color(0xFF0C130B);
   static const Color inputBg = Color(0xFF1B231B);
   static const Color textMuted = Color(0xFF8A9A8C);
   static const Color hintGrey = Color(0xFF5E6D60);
@@ -32,15 +32,79 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.dispose();
   }
 
+  Future<void> _register() async {
+    final name = _nameController.text.trim();
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+
+    if (name.isEmpty || email.isEmpty || password.isEmpty) {
+      _showMessage('Please fill in all fields.');
+      return;
+    }
+    if (password.length < 6) {
+      _showMessage('Password must be at least 6 characters.');
+      return;
+    }
+
+    setState(() => _isLoading = true);
+    try {
+      final cred = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      await cred.user?.updateDisplayName(name);
+      if (!mounted) return;
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const MainPage()),
+        (route) => false,
+      );
+    } on FirebaseAuthException catch (e) {
+      _showMessage(_friendlyError(e));
+    } catch (_) {
+      _showMessage('Something went wrong. Please try again.');
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+  String _friendlyError(FirebaseAuthException e) {
+    switch (e.code) {
+      case 'email-already-in-use':
+        return 'An account with this email already exists.';
+      case 'invalid-email':
+        return 'That email address looks invalid.';
+      case 'weak-password':
+        return 'Please choose a stronger password.';
+      case 'operation-not-allowed':
+        return 'Email/password sign-in is not enabled in Firebase.';
+      case 'network-request-failed':
+        return 'No internet connection.';
+      default:
+        return e.message ?? 'Could not create the account.';
+    }
+  }
+
+  void _showMessage(String text) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(text)));
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
     return Scaffold(
-      backgroundColor: black,
       body: Stack(
         children: [
-
+          Image.asset(
+            'assets/images/bg.png',
+            width: double.infinity,
+            height: double.infinity,
+            fit: BoxFit.cover,
+          ),
           SafeArea(
             child: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
@@ -50,7 +114,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 children: [
                   const SizedBox(height: 12),
 
-                  // logo
                   Row(
                     children: [
                       Container(
@@ -82,7 +145,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   const SizedBox(height: 40),
 
-                  // Heading Titles
                   const Text(
                     'Create your\nsafe space.',
                     style: TextStyle(
@@ -103,29 +165,33 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                   const SizedBox(height: 28),
-                  // Name Field
+
                   _buildInputBox(
                     controller: _nameController,
                     hint: 'Name',
                     prefixIcon: Icons.person_outline_rounded,
+                    textInputAction: TextInputAction.next,
                   ),
                   const SizedBox(height: 16),
 
-                  // Email Field (with mini floating-style label)
                   _buildInputBox(
                     controller: _emailController,
                     label: 'Email',
                     prefixIcon: Icons.alternate_email_rounded,
                     keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.next,
                   ),
                   const SizedBox(height: 16),
 
-                  // Password Field
                   _buildInputBox(
                     controller: _passwordController,
                     label: 'Password',
                     prefixIcon: Icons.lock_outline_rounded,
                     obscureText: _obscurePassword,
+                    textInputAction: TextInputAction.done,
+                    onSubmitted: (_) {
+                      if (!_isLoading) _register();
+                    },
                     suffixIcon: IconButton(
                       icon: Icon(
                         _obscurePassword
@@ -143,53 +209,63 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   const SizedBox(height: 28),
 
-                  // Create Account CTA Button
                   SizedBox(
                     width: double.infinity,
                     height: 54,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: _isLoading ? null : _register,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: green,
                         foregroundColor: const Color(0xFF131E10),
+                        disabledBackgroundColor: green,
                         elevation: 0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(22),
                         ),
                       ),
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.north_east_rounded,
-                            size: 18,
-                            color: Color(0xFF131E10),
-                          ),
-                          SizedBox(width: 8),
-                          Text(
-                            'Create account',
-                            style: TextStyle(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w700,
+                      child: _isLoading
+                          ? const SizedBox(
+                              width: 22,
+                              height: 22,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2.5,
+                                color: Color(0xFF131E10),
+                              ),
+                            )
+                          : const Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.north_east_rounded,
+                                  size: 18,
+                                  color: Color(0xFF131E10),
+                                ),
+                                SizedBox(width: 8),
+                                Text(
+                                  'Create account',
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
                     ),
                   ),
                   const SizedBox(height: 26),
 
-                  // Sign In Switch Link
                   Center(
                     child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const SignInScreen(),
-                          ),
-                        );
-                      },
+                      onTap: _isLoading
+                          ? null
+                          : () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const SignInScreen(),
+                                ),
+                              );
+                            },
                       child: RichText(
                         text: const TextSpan(
                           text: 'Already have an account? ',
@@ -213,7 +289,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   const SizedBox(height: 48),
 
-                  // Bottom Disclaimer Note
                   const Center(
                     child: Text(
                       'HushMind supports everyday wellness and is not a\nmedical service.',
@@ -243,6 +318,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     bool obscureText = false,
     Widget? suffixIcon,
     TextInputType keyboardType = TextInputType.text,
+    TextInputAction? textInputAction,
+    ValueChanged<String>? onSubmitted,
   }) {
     return Container(
       width: double.infinity,
@@ -250,9 +327,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       decoration: BoxDecoration(
         color: inputBg,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: Colors.white.withOpacity(0.04),
-        ),
+        border: Border.all(color: Colors.white),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -271,17 +346,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ],
           Row(
             children: [
-              Icon(
-                prefixIcon,
-                color: const Color(0xFFBACABA),
-                size: 20,
-              ),
+              Icon(prefixIcon, color: const Color(0xFFBACABA), size: 20),
               const SizedBox(width: 12),
               Expanded(
                 child: TextField(
                   controller: controller,
                   obscureText: obscureText,
                   keyboardType: keyboardType,
+                  textInputAction: textInputAction,
+                  onSubmitted: onSubmitted,
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 15,
@@ -289,10 +362,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   decoration: InputDecoration(
                     hintText: hint,
-                    hintStyle: const TextStyle(
-                      color: hintGrey,
-                      fontSize: 15,
-                    ),
+                    hintStyle: const TextStyle(color: hintGrey, fontSize: 15),
                     isDense: true,
                     contentPadding: const EdgeInsets.symmetric(vertical: 8),
                     border: InputBorder.none,
@@ -307,5 +377,4 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
     );
   }
-
 }

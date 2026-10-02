@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hushmind/onboarding1.dart';
@@ -14,7 +13,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // Simulate initial loading or navigation delay
+
     Future.delayed(const Duration(seconds: 3), () {
       if (!mounted) return;
 
@@ -27,29 +26,30 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Light status bar icons for dark background
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
-    const Green = Color(0xFFC7F464);
-    const Black = Color(0xFF0D120B);
+    const green = Color(0xFFC7F464);
 
     return Scaffold(
-      backgroundColor: Black,
       body: Stack(
         children: [
+          Image.asset(
+            'assets/images/bg.png',
+            width: double.infinity,
+            height: double.infinity,
+            fit: BoxFit.cover,
+          ),
 
-          // Main Content
           SafeArea(
             child: Column(
               children: [
                 const Spacer(),
 
-                // App Icon Container
                 Container(
                   width: 96,
                   height: 96,
                   decoration: BoxDecoration(
-                    color: Green,
+                    color: green,
                     borderRadius: BorderRadius.circular(28),
                   ),
                   child: const Center(
@@ -62,7 +62,6 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
                 const SizedBox(height: 28),
 
-                // App Title
                 const Text(
                   'HushMind',
                   style: TextStyle(
@@ -74,7 +73,6 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
                 const SizedBox(height: 12),
 
-                // Tagline
                 const Text(
                   'A safe space for mental wellness',
                   textAlign: TextAlign.center,
@@ -87,11 +85,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
                 const Spacer(),
 
-                // Bottom Page / Loading Indicator Dots
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _dot(Green),
+                    _dot(green),
                     const SizedBox(width: 8),
                     _dot(const Color(0xFF4A554A)),
                     const SizedBox(width: 8),
@@ -107,16 +104,11 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 
-
-  // Indicator dot helper
   Widget _dot(Color color) {
     return Container(
       width: 6,
       height: 6,
-      decoration: BoxDecoration(
-        color: color,
-        shape: BoxShape.circle,
-      ),
+      decoration: BoxDecoration(color: color, shape: BoxShape.circle),
     );
   }
 }

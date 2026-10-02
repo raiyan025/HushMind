@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hushmind/navigation_bar.dart';
@@ -12,13 +13,12 @@ class SignInScreen extends StatefulWidget {
 
 class _SignInScreenState extends State<SignInScreen> {
   bool _obscurePassword = true;
-  final TextEditingController _emailController =
-      TextEditingController(text: 'hello@hushmind.app');
-  final TextEditingController _passwordController =
-      TextEditingController(text: '••••••••');
+  bool _isLoading = false;
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   static const Color green = Color(0xFFC7F464);
-  static const Color black = Color(0xFF0D120B);
   static const Color cardFill = Color(0xFF1E261D);
   static const Color textMuted = Color(0xFF8E9E8E);
 
@@ -29,14 +29,75 @@ class _SignInScreenState extends State<SignInScreen> {
     super.dispose();
   }
 
+  Future<void> _signIn() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+
+    if (email.isEmpty || password.isEmpty) {
+      _showMessage('Please enter your email and password.');
+      return;
+    }
+
+    setState(() => _isLoading = true);
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      if (!mounted) return;
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const MainPage()),
+        (route) => false,
+      );
+    } on FirebaseAuthException catch (e) {
+      _showMessage(_friendlyError(e));
+    } catch (_) {
+      _showMessage('Something went wrong. Please try again.');
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+  String _friendlyError(FirebaseAuthException e) {
+    switch (e.code) {
+      case 'invalid-email':
+        return 'That email address looks invalid.';
+      case 'user-disabled':
+        return 'This account has been disabled.';
+      case 'user-not-found':
+      case 'wrong-password':
+      case 'invalid-credential':
+        return 'Incorrect email or password.';
+      case 'too-many-requests':
+        return 'Too many attempts. Please try again later.';
+      case 'network-request-failed':
+        return 'No internet connection.';
+      default:
+        return e.message ?? 'Sign in failed.';
+    }
+  }
+
+  void _showMessage(String text) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text(text)));
+  }
+
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
     return Scaffold(
-      backgroundColor: black,
       body: Stack(
         children: [
+          Image.asset(
+            'assets/images/bg.png',
+            width: double.infinity,
+            height: double.infinity,
+            fit: BoxFit.cover,
+          ),
           SafeArea(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -45,7 +106,6 @@ class _SignInScreenState extends State<SignInScreen> {
                 children: [
                   const SizedBox(height: 16),
 
-                  // Header Logo + Brand
                   Row(
                     children: [
                       Container(
@@ -77,7 +137,6 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                   const SizedBox(height: 44),
 
-                  // Title Heading
                   const Text(
                     'Welcome back.\nTake a breath.',
                     style: TextStyle(
@@ -90,7 +149,6 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                   const SizedBox(height: 20),
 
-                  // Subtitle
                   const Text(
                     'Your next quiet moment is waiting.',
                     style: TextStyle(
@@ -101,21 +159,24 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                   const SizedBox(height: 32),
 
-                  // Email Input Field
                   _buildInputField(
                     label: 'EMAIL',
                     controller: _emailController,
                     prefixIcon: Icons.alternate_email_rounded,
                     keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.next,
                   ),
                   const SizedBox(height: 14),
 
-                  // Password Input Field
                   _buildInputField(
                     label: 'Password',
                     controller: _passwordController,
                     prefixIcon: Icons.lock_outline_rounded,
                     obscureText: _obscurePassword,
+                    textInputAction: TextInputAction.done,
+                    onSubmitted: (_) {
+                      if (!_isLoading) _signIn();
+                    },
                     suffixIcon: IconButton(
                       icon: Icon(
                         _obscurePassword
@@ -133,50 +194,52 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                   const SizedBox(height: 28),
 
-                  // Sign In Button
                   SizedBox(
                     width: double.infinity,
                     height: 56,
                     child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const MainPage(),
-                          ),
-                        );
-                      },
+                      onPressed: _isLoading ? null : _signIn,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: green,
                         foregroundColor: const Color(0xFF161F12),
+                        disabledBackgroundColor: green,
                         elevation: 0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(28),
                         ),
                       ),
-                      child: const Text(
-                        'Sign in',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
+                      child: _isLoading
+                          ? const SizedBox(
+                              width: 22,
+                              height: 22,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2.5,
+                                color: Color(0xFF161F12),
+                              ),
+                            )
+                          : const Text(
+                              'Sign in',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
                     ),
                   ),
                   const SizedBox(height: 24),
 
-                  // Create Account Link
                   Center(
                     child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const RegisterScreen(),
-                          ),
-                        );
-                    
-                      },
+                      onTap: _isLoading
+                          ? null
+                          : () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const RegisterScreen(),
+                                ),
+                              );
+                            },
                       child: const Text(
                         'New here? Create an account',
                         style: TextStyle(
@@ -189,7 +252,6 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                   const SizedBox(height: 64),
 
-                  // Disclaimer Footer
                   const Center(
                     child: Text(
                       'HushMind supports everyday wellness\nand is not a medical service.',
@@ -216,6 +278,8 @@ class _SignInScreenState extends State<SignInScreen> {
     required TextEditingController controller,
     required IconData prefixIcon,
     TextInputType keyboardType = TextInputType.text,
+    TextInputAction? textInputAction,
+    ValueChanged<String>? onSubmitted,
     bool obscureText = false,
     Widget? suffixIcon,
   }) {
@@ -225,9 +289,7 @@ class _SignInScreenState extends State<SignInScreen> {
       decoration: BoxDecoration(
         color: cardFill,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: Colors.white.withOpacity(0.04),
-        ),
+        border: Border.all(color: Colors.white),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -244,17 +306,15 @@ class _SignInScreenState extends State<SignInScreen> {
           const SizedBox(height: 4),
           Row(
             children: [
-              Icon(
-                prefixIcon,
-                color: const Color(0xFFBACABA),
-                size: 20,
-              ),
+              Icon(prefixIcon, color: const Color(0xFFBACABA), size: 20),
               const SizedBox(width: 12),
               Expanded(
                 child: TextField(
                   controller: controller,
                   obscureText: obscureText,
                   keyboardType: keyboardType,
+                  textInputAction: textInputAction,
+                  onSubmitted: onSubmitted,
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 15,

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:hushmind/home_screen.dart';
-import 'package:hushmind/wellness_library_screen_full.dart';
+import 'package:hushmind/wellness_library.dart';
 import 'package:hushmind/journal.dart';
+import 'package:hushmind/insights.dart';
 import 'package:hushmind/profile.dart';
 
 class MainPage extends StatefulWidget {
@@ -17,8 +18,9 @@ class _MainPageState extends State<MainPage> {
 
   final pages = [
     const HomeScreen(),
-    const WellnessLibraryScreen(),
+    const LibraryScreen(),
     const JournalPage(),
+    const InsightsPage(),
     const ProfilePage(),
   ];
 
@@ -48,12 +50,7 @@ class BottomNavigation extends StatelessWidget {
     required this.onTap,
   });
 
-  static const names = [
-    'Home',
-    'Explore',
-    'Journal',
-    'Profile',
-  ];
+  static const names = ['Home', 'Explore', 'Journal', 'Insights', 'Profile'];
 
   @override
   Widget build(BuildContext context) {
@@ -61,12 +58,7 @@ class BottomNavigation extends StatelessWidget {
       height: 88,
       decoration: const BoxDecoration(
         color: Color(0xFF1A1D18),
-        border: Border(
-          top: BorderSide(
-            color: Color(0xFF2A2D27),
-            width: 1,
-          ),
-        ),
+        border: Border(top: BorderSide(color: Color(0xFF2A2D27), width: 1)),
       ),
       child: SafeArea(
         top: false,
@@ -76,7 +68,8 @@ class BottomNavigation extends StatelessWidget {
             navigationItem(Icons.home_rounded, 0),
             navigationItem(Icons.grid_view_rounded, 1),
             navigationItem(Icons.edit_note_rounded, 2),
-            navigationItem(Icons.person_rounded, 3),
+            navigationItem(Icons.auto_graph_outlined, 3),
+            navigationItem(Icons.person_rounded, 4),
           ],
         ),
       ),
@@ -98,9 +91,7 @@ class BottomNavigation extends StatelessWidget {
               width: 38,
               height: 38,
               decoration: BoxDecoration(
-                color: selected
-                    ? const Color(0xFFC9FF73)
-                    : Colors.transparent,
+                color: selected ? const Color(0xFFC9FF73) : Colors.transparent,
                 shape: BoxShape.circle,
               ),
               child: Icon(

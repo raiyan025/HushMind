@@ -44,11 +44,7 @@ class OnboardingCalm extends StatelessWidget {
               Row(
                 children: [
                   const SizedBox(width: 32),
-                  Icon(
-                    Icons.air,
-                    color: Color(0xFFC9FF73),
-                    size: 50,
-                  ),
+                  Icon(Icons.air, color: Color(0xFFC9FF73), size: 50),
                 ],
               ),
               const SizedBox(height: 35),
@@ -89,8 +85,8 @@ class OnboardingCalm extends StatelessWidget {
                   const SizedBox(width: 32),
                   const Text(
                     'Use short breathing sessions\n'
-                        'guided meditations grounding prompts\n'
-                        'designed for everyday stress.',
+                    'guided meditations grounding prompts\n'
+                    'designed for everyday stress.',
                     style: TextStyle(color: Color(0xFFB1B8AA), fontSize: 17),
                   ),
                 ],
